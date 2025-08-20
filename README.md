@@ -1,15 +1,15 @@
 # Decentralized Task Board on Base
 
-A smart contract on the Base network for creating, completing, and canceling tasks with ETH rewards. Built for the Base Builder Rewards: Summer League.
+A smart contract on the Base network for creating, completing, and canceling tasks with ETH rewards.
 
 ## Purpose
-This project demonstrates onchain activity and GitHub contributions for the Base ecosystem.
+This project increase users interaction with Base network.
 
 ## Contract Details
 - **File**: TaskBoard.sol
 - **Network**: Base mainnet \ Base Sepolia
-- **Sepolia Address**: 
-- **Mainnet Address**:
+- **Sepolia Address**: 0x2469EB4f7C098bB082AE8cafBAE2F401ec66d731, https://sepolia.basescan.org/address/0x2469eb4f7c098bb082ae8cafbae2f401ec66d731#code
+- **Mainnet Address**: 0xc69377c8B5C240bdffA71F57a805Fd0866f5281E, https://basescan.org/address/0xc69377c8b5c240bdffa71f57a805fd0866f5281e
 - **Verification**: Verified on Basescan
 
 ## How It Works
