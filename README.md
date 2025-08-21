@@ -24,9 +24,10 @@ This project demonstrates onchain activity and GitHub contributions for the Base
 
 ## Usage
 1. Open Remix (remix.ethereum.org).
-2. Paste `TaskBoard.sol` and compile with Solidity 0.8.20.
-3. Deploy to Base Sepolia or Mainnet using MetaMask.
-4. Interact with the contract to create/complete tasks.
+2. Paste `TaskBoard.sol` and `TaskVoting.sol`, compile with Solidity 0.8.20.
+3. Deploy `TaskBoard`, then deploy `TaskVoting` with TaskBoard’s address.
+4. Deploy to Base Sepolia and Mainnet using MetaMask.
+5. Interact to create tasks, vote, and release rewards.
 
 ## Links
 - Base: https://base.org
