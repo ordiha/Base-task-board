@@ -19,9 +19,8 @@ This project demonstrates onchain activity and GitHub contributions for the Base
    - Verified on Basescan.
 
 ## How It Works
-- Create a task with a description and ETH reward.
-- Complete a task to claim the reward.
-- Cancel a task to reclaim the reward.
+- **TaskBoard**: Create tasks with ETH rewards, complete or cancel them.
+- **TaskVoting**: Vote on completed tasks (min. 3 approvals) to release rewards or cancel voting
 
 ## Usage
 1. Open Remix (remix.ethereum.org).
