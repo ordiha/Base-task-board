@@ -26,12 +26,13 @@ This project demonstrates onchain activity and GitHub contributions for the Base
      
 ## How It Works
 - **TaskBoard**: Create tasks with ETH rewards, complete or cancel them.
-- **TaskVoting**: Vote on completed tasks (min. 3 approvals) to release rewards or cancel voting
+- **TaskVoting**: Vote on completed tasks (min. 3 approvals) to release rewards or cancel voting.
+- **TaskFeedback**: Submit ratings (1-5) and comments on tasks.
 
 ## Usage
 1. Open Remix (remix.ethereum.org).
-2. Paste `TaskBoard.sol` and `TaskVoting.sol`, compile with Solidity 0.8.20.
-3. Deploy `TaskBoard`, then deploy `TaskVoting` with TaskBoard’s address.
+2. Paste `TaskBoard.sol` and `TaskVoting.sol` and `TaskFeedback.sol`compile with Solidity 0.8.20.
+3. Deploy `TaskBoard`, then deploy `TaskVoting` and `TaskFeedback.sol` with TaskBoard’s address.
 4. Deploy to Base Sepolia and Mainnet using MetaMask.
 5. Interact to create tasks, vote, and release rewards.
 
