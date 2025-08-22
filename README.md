@@ -18,21 +18,29 @@ This project demonstrates onchain activity and GitHub contributions for the Base
    - Functionality: Vote on completed tasks to approve/reject and release rewards.
    - Verification: Verified on Basescan
 
-**TaskFeedback.sol**:
+3. **TaskFeedback.sol**:
    - Base Sepolia: 0x6887e09b52879Ba371bf1fc00B2032f4AD72FB82  link: https://sepolia.basescan.org/address/0x6887e09b52879ba371bf1fc00b2032f4ad72fb82#code
    - Base Mainnet: 0x7E2a95ad2e2Af4f3d762A7E3df8BFd5b8aE74A13  link: https://basescan.org/address/0x7e2a95ad2e2af4f3d762a7e3df8bfd5b8ae74a13#code
    - Functionality: Submit and view feedback (rating/comment) on completed tasks.
    - Verified on Basescan.
-     
+  
+4. **RewardTracker.sol**:
+   - Base Sepolia:
+   -  Base Mainnet:
+   - Functionality: 
+   - Verified on Basescan.
+       
 ## How It Works
 - **TaskBoard**: Create tasks with ETH rewards, complete or cancel them.
 - **TaskVoting**: Vote on completed tasks (min. 3 approvals) to release rewards or cancel voting.
 - **TaskFeedback**: Submit ratings (1-5) and comments on tasks.
+- **RewardTracker**: Earn points (1 point per 0.01 ETH reward) when completing tasks.
+
 
 ## Usage
 1. Open Remix (remix.ethereum.org).
-2. Paste `TaskBoard.sol` and `TaskVoting.sol` and `TaskFeedback.sol`compile with Solidity 0.8.20.
-3. Deploy `TaskBoard`, then deploy `TaskVoting` and `TaskFeedback.sol` with TaskBoard’s address.
+2. Paste `TaskBoard.sol` and `TaskVoting.sol`, `TaskFeedback.sol`and RewardTracker.sol compile with Solidity 0.8.20.
+3. Deploy `TaskBoard`, then deploy `TaskVoting`, `TaskFeedback.sol` and RewardTracker.sol with TaskBoard’s address.
 4. Deploy to Base Sepolia and Mainnet using MetaMask.
 5. Interact to create tasks, vote, and release rewards.
 
