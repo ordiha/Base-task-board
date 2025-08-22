@@ -25,9 +25,8 @@ This project demonstrates onchain activity and GitHub contributions for the Base
    - Verified on Basescan.
   
 4. **RewardTracker.sol**:
-   - Base Sepolia:
-   -  Base Mainnet:
-   - Functionality: 
+   - Base Sepolia: 0x28e4906398E7DFD2B33a714aabdC72aC9319fE4B  link: https://sepolia.basescan.org/address/0x28e4906398e7dfd2b33a714aabdc72ac9319fe4b#code
+   - Base Mainnet: 0x902323D974A66a13f829bbbD42fcD0c1dC390459  link: https://basescan.org/address/0x902323d974a66a13f829bbbd42fcd0c1dc390459#code
    - Verified on Basescan.
        
 ## How It Works
