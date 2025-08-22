@@ -25,7 +25,7 @@ contract RewardTracker {
     }
 
     function awardPoints(uint256 _taskId) external {
-        require(_t > 0 && _taskId <= taskBoard.taskCount(), "Invalid task ID");
+        require(_taskId > 0 && _taskId <= taskBoard.taskCount(), "Invalid task ID");
         ITaskBoard.Task memory task = taskBoard.tasks(_taskId);
         require(task.completed, "Task not completed");
         require(task.completer != address(0), "No completer");
