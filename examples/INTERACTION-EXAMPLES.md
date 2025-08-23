@@ -1,13 +1,10 @@
 # Interaction Examples
 
-## Screenshot 1: Task Creation
-- [Image: TaskCreation.png](https://sepolia.basescan.org/tx/0x123...)  
-- Shows createTask call with 0.01 ETH.
+## Screenshot 1: Task Creation (Task 5)
+- https://imgur.com/a/P4Xwv4a  
+- Shows createTask call with 0.001 ETH or less.
 
 ## Screenshot 2: Task Completion
-- [Image: TaskCompletion.png](https://sepolia.basescan.org/tx/0x456...)  
-- Shows completeTask for task ID 1.
+- https://imgur.com/a/gUooEsl
+- Shows completeTask for task ID 5.
 
-## Screenshot 3: Voting
-- [Image: Voting.png](https://sepolia.basescan.org/tx/0x789...)  
-- Shows voteOnTask with _approve: true.
