@@ -9,6 +9,7 @@ This project demonstrates onchain activity and GitHub contributions for the Base
 1. **TaskBoard.sol**:
 - **Network**: Base mainnet \ Base Sepolia
 - Sepolia Address**: 0x2469EB4f7C098bB082AE8cafBAE2F401ec66d731, Link: https://sepolia.basescan.org/address/0x2469eb4f7c098bb082ae8cafbae2f401ec66d731#code
+- Sepolia Address**: 0x3b0F20D3F160Be5a3290a29f108043f487AB4f2e, Link: https://sepolia.etherscan.io/address/0x3b0f20d3f160be5a3290a29f108043f487ab4f2e#code (Revised code)
 - Mainnet Address**: 0xc69377c8B5C240bdffA71F57a805Fd0866f5281E, Link: https://basescan.org/address/0xc69377c8b5c240bdffa71f57a805fd0866f5281e
 - Mainnet Address**: 0x4Ab2F84cce58b633FF671bA401AB9c761aD8Ae06, Link: https://basescan.org/address/0x4ab2f84cce58b633ff671ba401ab9c761ad8ae06#code  (Revised code)
 - Verification: Verified on Basescan
