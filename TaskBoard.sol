@@ -19,6 +19,7 @@ contract TaskBoard {
     event TaskCreated(uint256 taskId, address creator, string description, uint256 reward);
     event TaskCompleted(uint256 taskId, address completer);
     event TaskCancelled(uint256 taskId, address creator);
+    event TaskWithdrawn(uint256 taskId, address creator, uint256 amount);
 
     // Create a task with an ETH reward
     function createTask(string memory _description) external payable {
@@ -33,6 +34,7 @@ contract TaskBoard {
         Task storage task = tasks[_taskId];
         require(task.creator != address(0), "Task does not exist");
         require(!task.completed, "Task already completed");
+        require(msg.sender != task.creator, "Creator cannot complete");
         task.completed = true;
         task.completer = msg.sender;
         payable(msg.sender).transfer(task.reward);
@@ -44,8 +46,22 @@ contract TaskBoard {
         Task storage task = tasks[_taskId];
         require(task.creator == msg.sender, "Only creator can cancel");
         require(!task.completed, "Task already completed");
+        uint256 reward = task.reward;
         task.completed = true;
-        payable(task.creator).transfer(task.reward);
+        task.reward = 0;
+        payable(task.creator).transfer(reward);
         emit TaskCancelled(_taskId, msg.sender);
+    }
+
+    // Emergency withdraw for unclaimed completed tasks
+    function emergencyWithdraw(uint256 _taskId) external {
+        Task storage task = tasks[_taskId];
+        require(task.creator == msg.sender, "Only creator");
+        require(task.completed, "Task not completed");
+        require(task.completer == address(0), "Reward claimed");
+        uint256 reward = task.reward;
+        task.reward = 0;
+        payable(msg.sender).transfer(reward);
+        emit TaskWithdrawn(_taskId, msg.sender, reward);
     }
 }
