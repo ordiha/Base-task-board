@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base Task Board</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2e7d32;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #1b5e20;
+        }
+        p {
+            margin: 5px 0;
+        }
+        img {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 300px;
+            height: auto;
+        }
+        #status {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+        select {
+            padding: 5px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Base Task Board</h1>
+        <img src="https://i.imgur.com/YourImageId.jpg" alt="Base Task Board" style="width: 300px; height: auto;">
+
+        <div class="section">
+            <h2>TaskBoard (Sepolia)</h2>
+            <button onclick="addTaskSepolia()">Add Task</button>
+            <p>Task: <span id="taskSepolia"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>TaskBoard (Mainnet)</h2>
+            <button onclick="addTaskMainnet()">Add Task</button>
+            <p>Task: <span id="taskMainnet"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>TaskVoting (Sepolia)</h2>
+            <select id="voteOptionSepolia">
+                <option value="true">Approve</option>
+                <option value="false">Reject</option>
+            </select>
+            <button onclick="voteTaskSepolia()">Vote</button>
+            <p>Votes: <span id="votesSepolia"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>TaskVoting (Mainnet)</h2>
+            <select id="voteOptionMainnet">
+                <option value="true">Approve</option>
+                <option value="false">Reject</option>
+            </select>
+            <button onclick="voteTaskMainnet()">Vote</button>
+            <p>Votes: <span id="votesMainnet"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>TaskFeedback (Sepolia)</h2>
+            <button onclick="submitFeedbackSepolia()">Submit Feedback</button>
+            <p>Feedback: <span id="feedbackSepolia"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>TaskFeedback (Mainnet)</h2>
+            <button onclick="submitFeedbackMainnet()">Submit Feedback</button>
+            <p>Feedback: <span id="feedbackMainnet"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>RewardTracker (Sepolia)</h2>
+            <button onclick="trackRewardSepolia()">Track Reward</button>
+            <p>Reward: <span id="rewardSepolia"></span> ETH</p>
+        </div>
+
+        <div class="section">
+            <h2>RewardTracker (Mainnet)</h2>
+            <button onclick="trackRewardMainnet()">Track Reward</button>
+            <p>Reward: <span id="rewardMainnet"></span> ETH</p>
+        </div>
+
+        <p id="status"></p>
+    </div>
+
+    <script>
+        const web3 = new Web3(window.ethereum);
+        const addresses = {
+            taskBoardSepolia1: '0x2469EB4f7C098bB082AE8cafBAE2F401ec66d731',
+            taskBoardSepolia2: '0x3b0F20D3F160Be5a3290a29f108043f487AB4f2e',
+            taskBoardMainnet1: '0xc69377c8B5C240bdffA71F57a805Fd0866f5281E',
+            taskBoardMainnet2: '0x4Ab2F84cce58b633FF671bA401AB9c761aD8Ae06',
+            taskVotingSepolia: '0x47E3319bbf107A0506C9379a4B9B99ef221d91fC',
+            taskVotingMainnet: '0x55dB1777BfaCBFD89757f621B13440e960599548',
+            taskFeedbackSepolia: '0x6887e09b52879Ba371bf1fc00B2032f4AD72FB82',
+            taskFeedbackMainnet: '0x7E2a95ad2e2Af4f3d762A7E3df8BFd5b8aE74A13',
+            rewardTrackerSepolia: '0x28e4906398E7DFD2B33a714aabdC72aC9319fE4B',
+            rewardTrackerMainnet: '0x902323D974A66a13f829bbbD42fcD0c1dC390459'
+        };
+        const abis = {
+            taskBoard: [{"inputs":[{"internalType":"string","name":"_task","type":"string"}],"name":"addTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getTask","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}],
+            taskVoting: [{"inputs":[{"internalType":"bool","name":"_approve","type":"bool"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getVotes","outputs":[{"internalType":"uint256","name":"approvals","type":"uint256"},{"internalType":"uint256","name":"rejections","type":"uint256"}],"stateMutability":"view","type":"function"}],
+            taskFeedback: [{"inputs":[{"internalType":"uint256","name":"_rating","type":"uint256"},{"internalType":"string","name":"_comment","type":"string"}],"name":"submitFeedback","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getFeedback","outputs":[{"internalType":"uint256","name":"rating","type":"uint256"},{"internalType":"string","name":"comment","type":"string"}],"stateMutability":"view","type":"function"}],
+            rewardTracker: [{"inputs":[],"name":"trackReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
+        };
+
+        async function addTaskSepolia() {
+            const status = document.getElementById("status");
+            status.innerText = "Adding...";
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                const contract = new web3.eth.Contract(abis.taskBoard, addresses.taskBoardSepolia1);
+                await contract.methods.addTask("Complete task on Base").send({ from: accounts[0] });
+                status.innerText = "Added! Updating...";
+                updateTaskSepolia();
+            } catch (error) { status.innerText = "Error: " + error.message; }
+        }
+
+        async function addTaskMainnet() {
+            const status = document.getElementById("status");
+            status.innerText = "Adding...";
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                const contract = new web3.eth.Contract(abis.taskBoard, addresses.taskBoardMainnet1);
+                await contract.methods.addTask("Complete task on Base").send({ from: accounts[0] });
+                status.innerText = "Added! Updating...";
+                updateTaskMainnet();
+            } catch (error) { status.innerText = "Error: " + error.message; }
+        }
+
+        async function voteTaskSepolia() {
+            const status = document.getElementById("status");
+            status.innerText = "Voting...";
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                const contract = new web3.eth.Contract(abis.taskVoting, addresses.taskVotingSepolia);
+                const vote = document.getElementById("voteOptionSepolia").value === "true";
+                await contract.methods.vote(vote).send({ from: accounts[0] });
+                status.innerText = "Voted! Updating...";
+                updateVotesSepolia();
+            } catch (error) { status.innerText = "Error: " + error.message; }
+        }
+
+        async function voteTaskMainnet() {
+            const status = document.getElementById("status");
+            status.innerText = "Voting...";
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                const contract = new web3.eth.Contract(abis.taskVoting, addresses.taskVotingMainnet);
+                const vote = document.getElementById("voteOptionMainnet").value === "true";
+                await contract.methods.vote(vote).send({ from: accounts[0] });
+                status.innerText = "Voted! Updating...";
+                updateVotesMainnet();
+            } catch (error) { status.innerText = "Error: " + error.message; }
+        }
+
+        async function submitFeedbackSepolia() {
+            const status = document.getElementById("status");
+            status.innerText = "Submitting...";
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                const contract = new web3.eth.Contract(abis.taskFeedback, addresses.taskFeedbackSepolia);
+                await contract.methods.submitFeedback(4, "Great work!").send({ from: accounts[0] });
+                status.innerText = "Submitted! Updating...";
+                updateFeedbackSepolia();
+            } catch (error) { status.innerText = "Error: " + error.message; }
+        }
+
+        async function submitFeedbackMainnet() {
+            const status = document.getElementById("status");
+            status.innerText = "Submitting...";
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                const contract = new web3.eth.Contract(abis.taskFeedback, addresses.taskFeedbackMainnet);
+                await contract.methods.submitFeedback(4, "Great work!").send({ from: accounts[0] });
+                status.innerText = "Submitted! Updating...";
+                updateFeedbackMainnet();
+            } catch (error) { status.innerText = "Error: " + error.message; }
+        }
+
+        async function trackRewardSepolia() {
+            const status = document.getElementById("status");
+            status.innerText = "Tracking...";
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                const contract = new web3.eth.Contract(abis.rewardTracker, addresses.rewardTrackerSepolia);
+                await contract.methods.trackReward().send({ from: accounts[0] });
+                status.innerText = "Tracked! Updating...";
+                updateRewardSepolia();
+            } catch (error) { status.innerText = "Error: " + error.message; }
+        }
+
+        async function trackRewardMainnet() {
+            const status = document.getElementById("status");
+            status.innerText = "Tracking...";
+            try {
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await web3.eth.getAccounts();
+                const contract = new web3.eth.Contract(abis.rewardTracker, addresses.rewardTrackerMainnet);
+                await contract.methods.trackReward().send({ from: accounts[0] });
+                status.innerText = "Tracked! Updating...";
+                updateRewardMainnet();
+            } catch (error) { status.innerText = "Error: " + error.message; }
+        }
+
+        async function updateTaskSepolia() {
+            const contract = new web3.eth.Contract(abis.taskBoard, addresses.taskBoardSepolia1);
+            const task = await contract.methods.getTask(accounts[0]).call();
+            document.getElementById('taskSepolia').innerText = task;
+        }
+
+        async function updateTaskMainnet() {
+            const contract = new web3.eth.Contract(abis.taskBoard, addresses.taskBoardMainnet1);
+            const task = await contract.methods.getTask(accounts[0]).call();
+            document.getElementById('taskMainnet').innerText = task;
+        }
+
+        async function updateVotesSepolia() {
+            const contract = new web3.eth.Contract(abis.taskVoting, addresses.taskVotingSepolia);
+            const [approvals, rejections] = await contract.methods.getVotes().call();
+            document.getElementById('votesSepolia').innerText = `Approvals: ${approvals}, Rejections: ${rejections}`;
+        }
+
+        async function updateVotesMainnet() {
+            const contract = new web3.eth.Contract(abis.taskVoting, addresses.taskVotingMainnet);
+            const [approvals, rejections] = await contract.methods.getVotes().call();
+            document.getElementById('votesMainnet').innerText = `Approvals: ${approvals}, Rejections: ${rejections}`;
+        }
+
+        async function updateFeedbackSepolia() {
+            const contract = new web3.eth.Contract(abis.taskFeedback, addresses.taskFeedbackSepolia);
+            const [rating, comment] = await contract.methods.getFeedback(accounts[0]).call();
+            document.getElementById('feedbackSepolia').innerText = `Rating: ${rating}, Comment: ${comment}`;
+        }
+
+        async function updateFeedbackMainnet() {
+            const contract = new web3.eth.Contract(abis.taskFeedback, addresses.taskFeedbackMainnet);
+            const [rating, comment] = await contract.methods.getFeedback(accounts[0]).call();
+            document.getElementById('feedbackMainnet').innerText = `Rating: ${rating}, Comment: ${comment}`;
+        }
+
+        async function updateRewardSepolia() {
+            const contract = new web3.eth.Contract(abis.rewardTracker, addresses.rewardTrackerSepolia);
+            const reward = await contract.methods.getReward(accounts[0]).call();
+            document.getElementById('rewardSepolia').innerText = web3.utils.fromWei(reward, 'ether');
+        }
+
+        async function updateRewardMainnet() {
+            const contract = new web3.eth.Contract(abis.rewardTracker, addresses.rewardTrackerMainnet);
+            const reward = await contract.methods.getReward(accounts[0]).call();
+            document.getElementById('rewardMainnet').innerText = web3.utils.fromWei(reward, 'ether');
+        }
+
+        // Initial updates
+        (async () => {
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const accounts = await web3.eth.getAccounts();
+            updateTaskSepolia();
+            updateTaskMainnet();
+            updateVotesSepolia();
+            updateVotesMainnet();
+            updateFeedbackSepolia();
+            updateFeedbackMainnet();
+            updateRewardSepolia();
+            updateRewardMainnet();
+        })();
+    </script>
+</body>
+</html>
