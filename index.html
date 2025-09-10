@@ -71,13 +71,13 @@
 
         <div class="section">
             <h2>TaskBoard (Sepolia)</h2>
-            <button onclick="addTaskSepolia()">Add Task</button>
+            <button onclick="addTaskSepolia()">Add Task (Free)</button>
             <p>Task: <span id="taskSepolia"></span></p>
         </div>
 
         <div class="section">
             <h2>TaskBoard (Mainnet)</h2>
-            <button onclick="addTaskMainnet()">Add Task</button>
+            <button onclick="addTaskMainnet()">Add Task (0.0000001 ETH)</button>
             <p>Task: <span id="taskMainnet"></span></p>
         </div>
 
@@ -143,7 +143,7 @@
             rewardTrackerMainnet: '0x902323D974A66a13f829bbbD42fcD0c1dC390459'
         };
         const abis = {
-            taskBoard: [{"inputs":[{"internalType":"string","name":"_task","type":"string"}],"name":"addTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getTask","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}],
+            taskBoard: [{"inputs":[{"internalType":"string","name":"_task","type":"string"}],"name":"addTask","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getTask","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}],
             taskVoting: [{"inputs":[{"internalType":"bool","name":"_approve","type":"bool"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getVotes","outputs":[{"internalType":"uint256","name":"approvals","type":"uint256"},{"internalType":"uint256","name":"rejections","type":"uint256"}],"stateMutability":"view","type":"function"}],
             taskFeedback: [{"inputs":[{"internalType":"uint256","name":"_rating","type":"uint256"},{"internalType":"string","name":"_comment","type":"string"}],"name":"submitFeedback","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getFeedback","outputs":[{"internalType":"uint256","name":"rating","type":"uint256"},{"internalType":"string","name":"comment","type":"string"}],"stateMutability":"view","type":"function"}],
             rewardTracker: [{"inputs":[],"name":"trackReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getReward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
@@ -169,7 +169,7 @@
                 await window.ethereum.request({ method: 'eth_requestAccounts' });
                 const accounts = await web3.eth.getAccounts();
                 const contract = new web3.eth.Contract(abis.taskBoard, addresses.taskBoardMainnet1);
-                await contract.methods.addTask("Complete task on Base").send({ from: accounts[0] });
+                await contract.methods.addTask("Complete task on Base").send({ from: accounts[0], value: web3.utils.toWei('0.0000001', 'ether') });
                 status.innerText = "Added! Updating...";
                 updateTaskMainnet();
             } catch (error) { status.innerText = "Error: " + error.message; }
